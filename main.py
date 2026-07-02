@@ -35,10 +35,23 @@ class DNA:
             ay = random.uniform(-1,1)
             self.genes.append((ax,ay))
 
+class Population:
+    def __init__(self,size):
+        self.rockets = [Rocket(300,500) for i in range(size)]
+        
+    def update(self):
+        for rocket in self.rockets:
+            rocket.update()
+        
+    def draw(self,surface):
+        for rocket in self.rockets:
+            rocket.draw(surface)
+        
 WIDTH = 600
 HEIGHT = 600
 
 target_x,target_y = 300,50
+population = Population(50)
 
 rocket = Rocket(300,500)
 
@@ -55,11 +68,11 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             
-    rocket.update()
+    population.update()
             
     surface.fill(color)
     pygame.draw.circle(surface,"red",(target_x,target_y),10)
-    rocket.draw(surface)
+    population.draw(surface)
     pygame.display.flip()
     
     clock.tick(60)
