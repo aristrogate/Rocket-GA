@@ -8,7 +8,7 @@ class Rocket:
         self.y = y
         self.vx = 0
         self.vy = 0
-        self.dna = DNA(300)
+        self.dna = DNA(600)
         self.frame=0
         
     def update(self):
