@@ -38,6 +38,8 @@ class DNA:
 WIDTH = 600
 HEIGHT = 600
 
+target_x,target_y = 300,50
+
 rocket = Rocket(300,500)
 
 surface = pygame.display.set_mode((WIDTH,HEIGHT))
@@ -56,6 +58,7 @@ while running:
     rocket.update()
             
     surface.fill(color)
+    pygame.draw.circle(surface,"red",(target_x,target_y),10)
     rocket.draw(surface)
     pygame.display.flip()
     
