@@ -1,4 +1,5 @@
 import pygame
+import random
 pygame.init()
 
 class Rocket:
@@ -6,16 +7,33 @@ class Rocket:
         self.x = x
         self.y = y
         self.vx = 0
-        self.vy = -8
-        self.ax = 0
-        self.ay = 0.1
-
+        self.vy = 0
+        self.dna = DNA(300)
+        self.frame=0
+        
     def update(self):
-        self.y = self.y+self.vy
-        self.vy=self.vy+self.ay
+        if self.frame < len(self.dna.genes):
+            gene=self.dna.genes[self.frame]
+            self.ax,self.ay=gene
+        
+            self.vx=self.vx+self.ax
+            self.vy=self.vy+self.ay
+        
+            self.x = self.x + self.vx
+            self.y = self.y + self.vy
+        
+            self.frame = self.frame+1
 
     def draw(self, surface):
         pygame.draw.rect(surface,"white",(self.x,self.y,10,40))
+        
+class DNA:
+    def __init__(self,size):
+        self.genes = []
+        for i in range(size):
+            ax = random.uniform(-1,1)
+            ay = random.uniform(-1,1)
+            self.genes.append((ax,ay))
 
 WIDTH = 600
 HEIGHT = 600
