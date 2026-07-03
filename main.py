@@ -19,7 +19,7 @@ class Rocket:
             self.fitness = float('inf')
             
         else:
-            self.fitness = 1/distance
+            self.fitness = 1/distance + (1/self.frame)
         
     def update(self):
         if self.frame < len(self.dna.genes):
