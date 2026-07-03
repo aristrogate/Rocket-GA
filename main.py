@@ -34,15 +34,15 @@ class Rocket:
         
             self.frame = self.frame+1
 
-    def draw(self, surface):
-        pygame.draw.rect(surface,"white",(self.x,self.y,10,40))
+    def draw(self, surface,color="white"):
+        pygame.draw.rect(surface,color,(self.x,self.y,10,40))
         
 class DNA:
     def __init__(self,size):
         self.genes = []
         for i in range(size):
-            ax = random.uniform(-0.1,0.1)
-            ay = random.uniform(-0.1,0.1)
+            ax = random.uniform(-temp,temp)
+            ay = random.uniform(-temp,temp)
             self.genes.append((ax,ay))
             
     def crossover(self, partner):
@@ -60,8 +60,8 @@ class DNA:
     def mutate(self,mutation_rate):
         for i in range(len(self.genes)):
             if random.random() < mutation_rate:
-                ax = random.uniform(-0.1,0.1)
-                ay = random.uniform(-0.1,0.1)
+                ax = random.uniform(-temp,temp)
+                ay = random.uniform(-temp,temp)
                 self.genes[i] = (ax,ay)
 
 class Population:
@@ -72,9 +72,12 @@ class Population:
         for rocket in self.rockets:
             rocket.update()
         
-    def draw(self,surface):
+    def draw(self,surface,target_x,target_y):
         for rocket in self.rockets:
             rocket.draw(surface)
+            
+        best = min(self.rockets,key=lambda r:math.sqrt((target_x-r.x)**2+(target_y-r.y)**2))
+        best.draw(surface,color="green")
             
     def evaluate(self,target_x,target_y):
         for rocket in self.rockets:
@@ -112,6 +115,7 @@ class Population:
         
 WIDTH = 600
 HEIGHT = 600
+temp = 0.3
 
 target_x,target_y = 300,50
 population = Population(50)
@@ -137,7 +141,7 @@ while running:
             
     surface.fill(color)
     pygame.draw.circle(surface,"red",(target_x,target_y),10)
-    population.draw(surface)
+    population.draw(surface,target_x,target_y)
     pygame.display.flip()
     
     clock.tick(60)
