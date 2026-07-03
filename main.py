@@ -67,6 +67,7 @@ class DNA:
 class Population:
     def __init__(self,size):
         self.rockets = [Rocket(300,500) for i in range(size)]
+        self.generation=0
         
     def update(self):
         for rocket in self.rockets:
@@ -112,6 +113,7 @@ class Population:
             new_rockets.append(child)
             
         self.rockets = new_rockets
+        self.generation += 1
         
 WIDTH = 600
 HEIGHT = 600
@@ -127,6 +129,8 @@ color = "blue"
 running = True
 clock = pygame.time.Clock()
 
+font = pygame.font.SysFont("monospace", 16)
+
 while running:
 
     for event in pygame.event.get():
@@ -140,6 +144,8 @@ while running:
         population.next_generation()
             
     surface.fill(color)
+    text = font.render(f"Generation: {population.generation}", True, "white")
+    surface.blit(text, (10, 10))
     pygame.draw.circle(surface,"red",(target_x,target_y),10)
     population.draw(surface,target_x,target_y)
     pygame.display.flip()
