@@ -44,6 +44,25 @@ class DNA:
             ax = random.uniform(-1,1)
             ay = random.uniform(-1,1)
             self.genes.append((ax,ay))
+            
+    def crossover(self, partner):
+        child = DNA(len(self.genes))
+        midpoint = random.randint(0,len(self.genes))
+        for i in range(len(self.genes)):
+            if i < midpoint:
+                child.genes[i] = self.genes[i]
+                
+            else:
+                child.genes[i] = partner.genes[i]
+                
+        return child
+    
+    def mutate(self,mutation_rate):
+        for i in range(len(self.genes)):
+            if random.random() < mutation_rate:
+                ax = random.uniform(-1,1)
+                ay = random.uniform(-1,1)
+                self.genes[i] = (ax,ay)
 
 class Population:
     def __init__(self,size):
