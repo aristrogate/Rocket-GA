@@ -41,8 +41,8 @@ class DNA:
     def __init__(self,size):
         self.genes = []
         for i in range(size):
-            ax = random.uniform(-1,1)
-            ay = random.uniform(-1,1)
+            ax = random.uniform(-0.1,0.1)
+            ay = random.uniform(-0.1,0.1)
             self.genes.append((ax,ay))
             
     def crossover(self, partner):
@@ -60,8 +60,8 @@ class DNA:
     def mutate(self,mutation_rate):
         for i in range(len(self.genes)):
             if random.random() < mutation_rate:
-                ax = random.uniform(-1,1)
-                ay = random.uniform(-1,1)
+                ax = random.uniform(-0.1,0.1)
+                ay = random.uniform(-0.1,0.1)
                 self.genes[i] = (ax,ay)
 
 class Population:
@@ -86,6 +86,29 @@ class Population:
                 return False
         
         return True
+    
+    def next_generation(self):
+        pool = []
+        for rocket in self.rockets:
+            n = int(rocket.fitness * 1000)
+            for i in range(n):
+                pool.append(rocket)
+                
+        new_rockets = []
+        
+        for i in range(len(self.rockets)):
+            ParentA = random.choice(pool)
+            ParentB = random.choice(pool)
+            
+            child_dna = ParentA.dna.crossover(ParentB.dna)
+            
+            child_dna.mutate(0.01)
+            
+            child = Rocket(300,500)
+            child.dna = child_dna
+            new_rockets.append(child)
+            
+        self.rockets = new_rockets
         
 WIDTH = 600
 HEIGHT = 600
@@ -110,6 +133,7 @@ while running:
     
     if population.all_done():
         population.evaluate(target_x,target_y)
+        population.next_generation()
             
     surface.fill(color)
     pygame.draw.circle(surface,"red",(target_x,target_y),10)
