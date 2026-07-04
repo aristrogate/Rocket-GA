@@ -13,10 +13,10 @@ class Rocket:
         self.frame=0
         self.fitness=0
         self.completed=False
+        self.min_distance=float('inf')
         
     def calculate_fitness(self,target_x,target_y):
-        distance = math.sqrt((target_x-self.x)**2+(target_y-self.y)**2)
-        distance = max(distance,1)
+        distance = max(self.min_distance,1)
         self.fitness = 1/distance + (1/self.frame)
         
         if self.completed:
@@ -40,6 +40,9 @@ class Rocket:
             self.frame = self.frame+1
             
             distance = math.sqrt((target_x-self.x)**2 + (target_y-self.y)**2)
+            if distance < self.min_distance:
+                self.min_distance = distance
+            
             if distance < 10:
                 self.completed = True
 
