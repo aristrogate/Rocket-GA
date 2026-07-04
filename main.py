@@ -15,11 +15,8 @@ class Rocket:
         
     def calculate_fitness(self,target_x,target_y):
         distance = math.sqrt((target_x-self.x)**2+(target_y-self.y)**2)
-        if distance == 0:
-            self.fitness = float('inf')
-            
-        else:
-            self.fitness = 1/distance + (1/self.frame)
+        distance = max(distance,1)
+        self.fitness = 1/distance + (1/self.frame)
         
     def update(self):
         if self.frame < len(self.dna.genes):
