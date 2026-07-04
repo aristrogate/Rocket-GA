@@ -12,13 +12,21 @@ class Rocket:
         self.dna = DNA(300)
         self.frame=0
         self.fitness=0
+        self.completed=False
         
     def calculate_fitness(self,target_x,target_y):
         distance = math.sqrt((target_x-self.x)**2+(target_y-self.y)**2)
         distance = max(distance,1)
         self.fitness = 1/distance + (1/self.frame)
         
-    def update(self):
+        if self.completed:
+            self.fitness = self.fitness*10
+        
+    def update(self,target_x,target_y):
+        if self.completed:
+            return
+        
+        
         if self.frame < len(self.dna.genes):
             gene=self.dna.genes[self.frame]
             self.ax,self.ay=gene
@@ -30,6 +38,10 @@ class Rocket:
             self.y = self.y + self.vy
         
             self.frame = self.frame+1
+            
+            distance = math.sqrt((target_x-self.x)**2 + (target_y-self.y)**2)
+            if distance < 10:
+                self.completed = True
 
     def draw(self, surface,color="white"):
         pygame.draw.rect(surface,color,(self.x,self.y,10,40))
@@ -67,9 +79,9 @@ class Population:
         self.rockets = [Rocket(300,500) for i in range(size)]
         self.generation=0
         
-    def update(self):
+    def update(self,target_x,target_y):
         for rocket in self.rockets:
-            rocket.update()
+            rocket.update(target_x,target_y)
         
     def draw(self,surface,target_x,target_y):
         for rocket in self.rockets:
@@ -84,9 +96,8 @@ class Population:
             
     def all_done(self):
         for rocket in self.rockets:
-            if rocket.frame < len(rocket.dna.genes):
+            if not rocket.completed and rocket.frame < len(rocket.dna.genes):
                 return False
-        
         return True
     
     def next_generation(self):
@@ -135,7 +146,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             
-    population.update()
+    population.update(target_x,target_y)
     
     if population.all_done():
         population.evaluate(target_x,target_y)
