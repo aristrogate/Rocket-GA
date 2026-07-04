@@ -35,15 +35,16 @@ class Rocket:
         pygame.draw.rect(surface,color,(self.x,self.y,10,40))
         
 class DNA:
-    def __init__(self,size):
+    def __init__(self,size,max_force=0.3):
+        self.max_force = max_force
         self.genes = []
         for i in range(size):
-            ax = random.uniform(-temp,temp)
-            ay = random.uniform(-temp,temp)
+            ax = random.uniform(-self.max_force,self.max_force)
+            ay = random.uniform(-self.max_force,self.max_force)
             self.genes.append((ax,ay))
             
     def crossover(self, partner):
-        child = DNA(len(self.genes))
+        child = DNA(len(self.genes),self.max_force)
         midpoint = random.randint(0,len(self.genes))
         for i in range(len(self.genes)):
             if i < midpoint:
@@ -57,8 +58,8 @@ class DNA:
     def mutate(self,mutation_rate):
         for i in range(len(self.genes)):
             if random.random() < mutation_rate:
-                ax = random.uniform(-temp,temp)
-                ay = random.uniform(-temp,temp)
+                ax = random.uniform(-self.max_force,self.max_force)
+                ay = random.uniform(-self.max_force,self.max_force)
                 self.genes[i] = (ax,ay)
 
 class Population:
@@ -115,7 +116,6 @@ class Population:
         
 WIDTH = 600
 HEIGHT = 600
-temp = 0.3
 
 target_x,target_y = 300,50
 population = Population(50)
