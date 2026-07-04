@@ -89,9 +89,10 @@ class Population:
         return True
     
     def next_generation(self):
+        max_fitness = max(rocket.fitness for rocket in self.rockets)
         pool = []
         for rocket in self.rockets:
-            n = int(rocket.fitness * 1000)
+            n = int((rocket.fitness/max_fitness) * 100)
             for i in range(n):
                 pool.append(rocket)
                 
